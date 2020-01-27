@@ -17,7 +17,7 @@ UPDATE_EVERY = 4        # how often to update the network
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, seed):
+    def __init__(self, state_size, action_size, update_type='dqn', seed):
         """Initialize an Agent object.
         
         Params
@@ -29,6 +29,7 @@ class Agent():
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(seed)
+        self.update_type = update_type
 
         # Q-Network
         self.qnetwork_local = QNetwork(state_size, action_size)
@@ -88,7 +89,7 @@ class Agent():
 
         with tf.GradientTape() as tape:
 
-            target_q = tf.reduce_max(self.qnetwork_target(next_states),1)
+            target_q = self.compute_target(next_states)
             target_q = tf.multiply(tf.cast((1-float(dones)),tf.float32), target_q)
             target_qv = tf.stop_gradient(tf.cast(rewards,tf.float32) + GAMMA * target_q)
             q_v = tf.reduce_sum(tf.multiply(self.qnetwork_local(states),tf.one_hot(actions,self.action_size)),1)
@@ -99,7 +100,17 @@ class Agent():
         self.optimizer.apply_gradients(zip(grads,self.qnetwork_local.trainable_variables))
 
         # ------------------- update target network ------------------- #
-        self.soft_update(self.qnetwork_local, self.qnetwork_target, TAU)                     
+        self.soft_update(self.qnetwork_local, self.qnetwork_target, TAU)
+
+    def compute_target(self, next_states):
+
+        if self.update_type=='ddqn':
+            max_acts = tf.argmax(self.qnetwork_local(next_states), 1)
+            target_q = tf.reduce_sum(tf.multiply(self.qnetwork_target(next_states),
+                                                tf.one_hot(max_acts, self.action_size)), 1)
+        else:
+            target_q = tf.reduce_max(self.qnetwork_target(next_states),1)
+        return target_q
 
     def soft_update(self, local_model, target_model, tau):
         """Soft update model parameters.
