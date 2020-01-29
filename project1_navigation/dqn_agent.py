@@ -17,7 +17,7 @@ UPDATE_EVERY = 4        # how often to update the network
 class Agent():
     """Interacts with and learns from the environment."""
 
-    def __init__(self, state_size, action_size, update_type='dqn', seed):
+    def __init__(self, state_size, action_size, update_type='dqn', seed=0):
         """Initialize an Agent object.
         
         Params
@@ -174,13 +174,13 @@ class ReplayBuffer:
 
         for i in idxes:
             e = self.memory[i]
-            states.append(np.array(e.state, copy=False))
+            states.append(np.array(e.state, copy=False, dtype='float32'))
             actions.append(np.array(e.action, copy=False))
             rewards.append(e.reward)
-            next_states.append(np.array(e.next_state, copy=False))
+            next_states.append(np.array(e.next_state, copy=False, dtype='float32'))
             dones.append(e.done)
 
-        return np.array(states), np.array(actions), np.array(rewards), np.array(next_states), np.array(dones)
+        return np.array(states), np.array(actions), np.array(rewards, dtype='float32'), np.array(next_states), np.array(dones)
     
     def sample(self):
         """Randomly sample a batch of experiences from memory."""

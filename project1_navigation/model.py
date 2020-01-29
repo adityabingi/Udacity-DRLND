@@ -20,10 +20,8 @@ class QNetwork(tf.keras.Model):
             action_size (int): Dimension of each action
             seed (int): Random seed
         """
-        super(QNetwork, self).__init__(name='Q_Network')
+        super(QNetwork, self).__init__(name='Q_Network', autocast=False)
 
-        "*** YOUR CODE HERE ***"
-        
         self.fc1 = linear(fc1_units)
         self.fc2 = linear(fc2_units)
         self.fc3 = linear(action_size)
