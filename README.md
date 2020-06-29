@@ -27,11 +27,8 @@ and projects.Although Udacity repo is based on pytorch I implement all the proje
 
 ## Projects 
 
-[Project1-Naviagation](project1_navigation/)
+[Project1-Naviagation](project1_navigation/)  - Navigating a square world environment and collecting Bananas (Unity ML Agents Env). State space has 37 dimensions and contains the agent's velocity, along with ray-based perception of objects around agent's forward direction and the agent should learn how to select best of four distinct actions (moving forward, left, right, backward). DQN and Double DQN algorithms are used to solve this Environment. Detailed description will soon be updated here.
 
 [Project2-Continuous Control](project2_continuous-control/)   - Will be updated soon
 
 [Project3 - Collaboration and Competition](project3_colab-compete/)  - Will be updated soon
-
-
-# Results
